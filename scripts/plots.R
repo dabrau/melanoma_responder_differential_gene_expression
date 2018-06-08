@@ -1,3 +1,4 @@
+library(tidyverse)
 library(ggplot2)
 library(gplots)
 library(edgeR)
@@ -46,7 +47,7 @@ tmm_norm <- function(counts) {
 hclust.ward = function(d) hclust(d,method="ward.D2")
 
 heatmap <- function(counts, colors) {
-  hm <- heatmap.2(
+  heatmap.2(
     counts,
     trace = "none",
     breaks = (-40:40 / 20),
@@ -63,8 +64,6 @@ heatmap <- function(counts, colors) {
          lty= 1,
          lwd = 10
   )
-  
-  hm
 }
 
 scale_counts <- function(counts) {
@@ -86,16 +85,16 @@ de_heatmaps <- function(data) {
   color_labels <- c(rep("purple", length(data$nonresponder)), rep("orange", length(data$responder)))
   
   if (sum(tt$P.Value <= 0.05) > 300) {
-    heatmaps$top300 <- heatmap(scale_counts(norm[1:300, ]), color_labels)
+    heatmaps$top300 <- function() heatmap(scale_counts(norm[1:300, ]), color_labels)
   }
   
   sig05Labels <- tt %>% filter(P.Value <= 0.05) %>% dplyr::select(label) %>% unlist
   scaled_sig05 <- scale_counts(norm[sig05Labels, ])
   heatmaps$scaled_sig05_matrix <- scaled_sig05
-  heatmaps$sig05 <- heatmap(scaled_sig05, color_labels)
+  heatmaps$sig05 <- function() heatmap(scaled_sig05, color_labels)
   
   sig01Labels <- tt %>% filter(P.Value <= 0.01) %>% dplyr::select(label) %>% unlist
-  heatmaps$sig01 <- heatmap(scale_counts(norm[sig01Labels, ]), color_labels)
+  heatmaps$sig01 <- function() heatmap(scale_counts(norm[sig01Labels, ]), color_labels)
   
   data$heatmaps <- heatmaps
   data
