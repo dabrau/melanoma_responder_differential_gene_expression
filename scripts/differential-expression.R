@@ -1,3 +1,4 @@
+library(tidyverse)
 library(edgeR)
 library(limma)
 library(methods)
@@ -30,7 +31,7 @@ DE <- function(counts, nonresponder, responder) {
   )
 }
 
-de_response_samples <- function(data) {
+de_responder_samples <- function(data) {
   de <- DE(data$counts, data$nonresponder, data$responder)
   
   hugo_names <- read_tsv("./data/ensembl-hugo-mapping.txt")

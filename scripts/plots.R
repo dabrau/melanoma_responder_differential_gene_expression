@@ -4,7 +4,7 @@ library(gplots)
 library(edgeR)
 
 p_val_hist <- function(pVals) {
-  hist(pVals, main = "Histogram of P-Values", xlab = "p-value")
+  function() hist(pVals, main = "Histogram of P-Values", xlab = "p-value")
 }
 
 volcano_plot <- function(tt) {

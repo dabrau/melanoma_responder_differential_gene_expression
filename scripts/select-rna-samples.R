@@ -1,13 +1,11 @@
 library(tidyverse)
 
-select_data <- function(compartment, minEHK) {
-  rna_seq_df <- read_tsv("./data/rna_seq_tubes.tsv") %>%
-    filter(eisenberg_score >= 7) %>%
-    filter(tube_comp == "tumor")
-  
+select_data <- function(comp, minEHK) {
   responder_df <- read_tsv("./data/responder_status.txt")
   
-  rna_seq_df <- rna_seq_df %>%
+  rna_seq_df <- read_tsv("./data/rna_seq_tubes.tsv") %>%
+    filter(eisenberg_score >= minEHK) %>%
+    filter(tube_comp == comp) %>%
     left_join(responder_df, by = "sample") %>%
     filter(`responder status` %in% c("NR", "R"))
   
@@ -25,7 +23,7 @@ select_data <- function(compartment, minEHK) {
     responder = responder,
     nonresponder = nonresponder,
     counts = counts_matrix,
-    compartment = compartment,
+    compartment = comp,
     date = date()
   )
 }

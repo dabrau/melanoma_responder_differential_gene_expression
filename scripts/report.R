@@ -1,4 +1,5 @@
 library(tidyverse)
+library(ggplot2)
 
 de_summary <- function(data) {
   data.frame(
@@ -55,9 +56,6 @@ save_plot <- function(report_plot, dir, filename) {
   if (class(report_plot) == "function") {
     report_plot()
     dev.off()
-  } else if (class(plot) == "histogram") {
-    plot(report_plot)
-    dev.off()
   }
 }
 
@@ -78,6 +76,7 @@ report <- function(data) {
   
   data %>% de_summary %>% write_tsv(paste0(output, "/summary.tsv"))
   data %>% de_samples %>% write_tsv(paste0(output, "/samples.tsv"))
+  data$de$tt %>% write_tsv(paste0(output, "/de_table.tsv"))
   data$counts %>% matrix_to_tsv("gene_id", paste0(output, "/counts.tsv"))
   
   plots_output <- paste0(output, "/plots")
