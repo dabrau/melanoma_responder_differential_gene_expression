@@ -90,7 +90,9 @@ de_heatmaps <- function(data) {
   }
   
   sig05Labels <- tt %>% filter(P.Value <= 0.05) %>% dplyr::select(label) %>% unlist
-  heatmaps$sig05 <- heatmap(scale_counts(norm[sig05Labels, ]), color_labels)
+  scaled_sig05 <- scale_counts(norm[sig05Labels, ])
+  heatmaps$scaled_sig05_matrix <- scaled_sig05
+  heatmaps$sig05 <- heatmap(scaled_sig05, color_labels)
   
   sig01Labels <- tt %>% filter(P.Value <= 0.01) %>% dplyr::select(label) %>% unlist
   heatmaps$sig01 <- heatmap(scale_counts(norm[sig01Labels, ]), color_labels)
